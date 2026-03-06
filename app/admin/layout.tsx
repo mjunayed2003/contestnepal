@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+"use client";
+
 import { ReduxProvider } from "@/component/ReduxProvider";
 import AdminSidebar from "@/component/layout/AdminSidebar";
 import AdminTopbar from "@/component/layout/AdminTopbar";
-
-export const metadata: Metadata = {
-  title: "Admin Panel",
-};
+import AuthGuard from "@/component/AuthGuard";
 
 export default function AdminLayout({
   children,
@@ -13,14 +11,27 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-[#F8F9FB]">
-      <AdminSidebar />
-      <div className="flex flex-col flex-1 min-w-0">
-        <AdminTopbar />
-        <main className="flex-1 p-8 overflow-auto">
-          {children}
-        </main>
-      </div>
-    </div>
+    <ReduxProvider>
+      <AuthGuard>
+        <div className="flex min-h-screen bg-[#F8F9FB]">
+          
+          {/* Sidebar Fixed Width */}
+          <AdminSidebar />
+
+          {/* Main Content Area */}
+          <div className="flex flex-col flex-1 min-w-0">
+            
+            {/* Topbar */}
+            <AdminTopbar />
+            
+            {/* Scrollable Page Content */}
+            <main className="flex-1 p-8 overflow-y-auto h-[calc(100vh-68px)]">
+              {children}
+            </main>
+          </div>
+
+        </div>
+      </AuthGuard>
+    </ReduxProvider>
   );
 }

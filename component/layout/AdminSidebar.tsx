@@ -15,10 +15,11 @@ import {
   LogOut,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 const navItems = [
-  { label: "Dashboard",         href: "/admin/",         icon: LayoutDashboard },
+  { label: "Dashboard",         href: "/admin",         icon: LayoutDashboard },
   { label: "My Contests",       href: "/admin/contests",          icon: Trophy          },
   { label: "Submissions",       href: "/admin/submissions",       icon: FileText        },
   { label: "Participants",      href: "/admin/participants",      icon: Users           },
@@ -31,14 +32,14 @@ export default function AdminSidebar() {
   const dispatch = useDispatch();
 
   return (
-    <aside className="w-[272px] min-h-screen bg-white border-r border-gray-200 flex flex-col shrink-0 sticky top-0">
+    <aside className="w-[272px] h-screen bg-white border-r border-gray-200 flex flex-col shrink-0 sticky top-0 left-0 overflow-y-auto">
 
-      {/* Logo */}
-      <div className="flex items-center justify-center h-[68px] px-6 border-b border-gray-200 shrink-0">
+      {/* Logo Section */}
+      <div className="flex items-center justify-start h-[68px] px-8 border-b border-gray-200">
         <Link href="/admin/dashboard">
           <Image
-            src="/images/logo.svg"
-            alt="Logo"
+            src="/images/logo.svg" 
+            alt="Wuffoos Logo"
             width={120}
             height={36}
             className="object-contain"
@@ -47,60 +48,46 @@ export default function AdminSidebar() {
         </Link>
       </div>
 
-      {/* Nav */}
-      <nav className="flex flex-col flex-1 px-4 pt-6 gap-1">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest px-3 mb-2">
+      {/* Navigation Menu */}
+      <nav className="flex flex-col flex-1 px-4 pt-6 gap-2">
+        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest px-4 mb-2">
           Menu
         </p>
 
         {navItems.map(({ label, href, icon: Icon }) => {
-          const isActive =
-            pathname === href || pathname.startsWith(href + "/");
-
+          // Active link logic
+          const isActive = pathname === href || pathname.startsWith(`${href}/`);
+          
           return (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-3 h-10 px-3 rounded-xl text-sm font-medium transition-all duration-150 group",
-                isActive
-                  ? "bg-[#A01C1C] text-white"
-                  : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-              )}
-            >
-              <Icon
-                size={18}
-                strokeWidth={1.8}
+            <Link key={href} href={href} className="w-full">
+              <div
                 className={cn(
-                  "shrink-0 transition-colors duration-150",
+                  "flex items-center gap-3 h-11 px-4 text-sm font-medium rounded-xl transition-all duration-200 cursor-pointer",
                   isActive
-                    ? "text-white"
-                    : "text-gray-400 group-hover:text-gray-600"
+                    ? "bg-[#A01C1C] text-white shadow-md"
+                    : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                 )}
-              />
-              <span>{label}</span>
+              >
+                <Icon
+                  size={20}
+                  strokeWidth={isActive ? 2 : 1.8}
+                  className={cn(isActive ? "text-white" : "text-gray-400")}
+                />
+                {label}
+              </div>
             </Link>
           );
         })}
       </nav>
 
-      {/* Logout */}
-      <div className="px-4 pb-6 shrink-0">
-        <Separator className="mb-4" />
+      {/* Logout Section */}
+      <div className="px-4 pb-8 mt-auto">
+        <Separator className="mb-4 bg-gray-100" />
         <button
           onClick={() => dispatch(logout())}
-          className="
-            flex items-center gap-3 h-10 px-3 w-full rounded-xl
-            text-sm font-medium text-[#A01C1C]
-            hover:bg-red-50 transition-all duration-150
-            group
-          "
+          className="w-full flex items-center gap-3 h-11 px-4 text-sm font-medium text-[#A01C1C] hover:bg-red-50 rounded-xl transition-colors"
         >
-          <LogOut
-            size={18}
-            strokeWidth={1.8}
-            className="shrink-0 transition-transform duration-150 group-hover:-translate-x-0.5"
-          />
+          <LogOut size={20} strokeWidth={1.8} />
           Log Out
         </button>
       </div>
