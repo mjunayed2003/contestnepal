@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react"; // Icons updated
 import { useDispatch, useSelector } from "react-redux";
-// আপনার ফোল্ডার স্ট্রাকচার অনুযায়ী পাথ ঠিক করে নিন
+
 import { loginStart, loginSuccess, loginFailure } from "@/redux/features/authSlice"; 
 
 const SignIn = () => {
@@ -24,7 +24,7 @@ const SignIn = () => {
     if (isAuthenticated) {
       if (role === "organizer") {
         console.log("Redirecting to Organizer Dashboard...");
-        router.push("/organizer/dashboard");
+        router.push("/admin");
       } else {
         console.log("Redirecting to User Home...");
         router.push("/");
