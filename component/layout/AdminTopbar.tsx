@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Bell, Search } from "lucide-react";
 import { useSelector } from "react-redux";
@@ -20,10 +20,9 @@ const pageTitles: Record<string, string> = {
 
 export default function AdminTopbar() {
   const pathname  = usePathname();
-  // Redux থেকে ইউজার ডাটা নেওয়া হচ্ছে
+  const router    = useRouter();
   const { user }  = useSelector((state: any) => state.auth);
   
-  // ডাইনামিক টাইটেল সেট করা (সাব-রাউট হ্যান্ডেল করার জন্য সাধারণ লজিক)
   const currentKey = Object.keys(pageTitles).find(key => pathname.startsWith(key)) || "/admin/dashboard";
   const title = pageTitles[currentKey] || "Dashboard";
 
@@ -57,6 +56,7 @@ export default function AdminTopbar() {
 
         {/* Notification Bell */}
         <Button
+          onClick={()=>router.push("/admin/notifications")}
           variant="ghost"
           size="icon"
           className="relative h-10 w-10 rounded-full hover:bg-gray-100 text-gray-500"
@@ -76,7 +76,7 @@ export default function AdminTopbar() {
           
           <div className="w-10 h-10 rounded-full overflow-hidden border border-gray-200 shrink-0">
             <Image
-              src={user?.avatar || "/images/userprofile.png"} // আপনার ইমেজ পাথ দিন
+              src={user?.avatar || "/images/userprofile.png"}
               alt="Admin Profile"
               width={40}
               height={40}

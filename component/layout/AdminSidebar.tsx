@@ -50,10 +50,6 @@ export default function AdminSidebar() {
 
       {/* Navigation Menu */}
       <nav className="flex flex-col flex-1 px-4 pt-6 gap-2">
-        <p className="text-[11px] font-semibold text-gray-400 uppercase tracking-widest px-4 mb-2">
-          Menu
-        </p>
-
         {navItems.map(({ label, href, icon: Icon }) => {
           // Active link logic
           const isActive =
