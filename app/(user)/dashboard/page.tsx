@@ -3,142 +3,97 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
-  Clock, CheckCircle, XCircle,
-  AlertCircle, Check, X
+  Clock, AlertCircle, Check, X,
+  Trophy, FileCheck, Hourglass,
 } from "lucide-react";
 
 // ─── MOCK DATA ────────────────────────────────────────────────
 const GIVEAWAY_DATA = [
-  { 
-    id: 1, 
-    title: "Win a Premium Gaming Setup", 
-    description: "Capture the essence of summer in a single photo. We are looking for vibrant colors, outdoor adventures, and sunny vibes.", 
-    status: "Active", 
-    image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80" 
-  },
-  { 
-    id: 2, 
-    title: "iPhone 15 Pro Max Giveaway", 
-    description: "Follow our social media channels and stand a chance to win the brand new iPhone 15 Pro Max.", 
-    status: "Active", 
-    image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80" 
-  },
+  { id: 1,   title: "Win a Premium Gaming Setup",  description: "Capture the essence of summer in a single photo. We are looking for vibrant colors, outdoor adventures, and sunny vibes.", status: "Active", image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80" },
+  { id: 2,   title: "iPhone 15 Pro Max Giveaway",  description: "Follow our social media channels and stand a chance to win the brand new iPhone 15 Pro Max.",                            status: "Active", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80" },
+  { id: 3,   title: "Win a Premium Gaming Setup",  description: "Capture the essence of summer in a single photo. We are looking for vibrant colors, outdoor adventures, and sunny vibes.", status: "Active", image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80" },
+  { id: 4,   title: "iPhone 15 Pro Max Giveaway",  description: "Follow our social media channels and stand a chance to win the brand new iPhone 15 Pro Max.",                            status: "Active", image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=600&q=80" },
 ];
-
 const SUBMISSION_DATA = [
-  { 
-    id: 101, 
-    title: "Best Mobile Photography", 
-    description: "Submit your best shot taken with a mobile phone. No DSLR allowed. Theme: Urban Life.", 
-    status: "Active", 
-    image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80" 
-  },
-  { 
-    id: 102, 
-    title: "Logo Design Challenge", 
-    description: "Create a unique logo for our new eco-friendly brand 'GreenLeaf'. Minimalist designs preferred.", 
-    status: "Active", 
-    image: "https://images.unsplash.com/photo-1626785774573-4b799314346d?w=600&q=80" 
-  },
+  { id: 101, title: "Best Mobile Photography",     description: "Submit your best shot taken with a mobile phone. No DSLR allowed. Theme: Urban Life.",                                  status: "Active", image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600&q=80" },
+  { id: 102, title: "Logo Design Challenge",        description: "Create a unique logo for our new eco-friendly brand 'GreenLeaf'. Minimalist designs preferred.",                         status: "Active", image: "https://images.unsplash.com/photo-1626785774573-4b799314346d?w=600&q=80" },
 ];
-
 const POLL_DATA = [
-  { 
-    id: 201, 
-    title: "World Cup Prediction Poll", 
-    description: "Predict the winner of the upcoming matches and win big prizes from the shared poll.", 
-    status: "Active", 
-    image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=600&q=80" 
-  },
-  { 
-    id: 202, 
-    title: "Crypto Price Prediction", 
-    description: "Guess the Bitcoin price at the end of the month. The closest guess wins the entire poll.", 
-    status: "Closed", 
-    image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=600&q=80" 
-  },
+  { id: 201, title: "World Cup Prediction Poll",    description: "Predict the winner of the upcoming matches and win big prizes from the shared poll.",                                    status: "Active", image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=600&q=80" },
+  { id: 202, title: "Crypto Price Prediction",      description: "Guess the Bitcoin price at the end of the month. The closest guess wins the entire poll.",                               status: "Closed", image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=600&q=80" },
 ];
-
 const MY_SUBMISSIONS = [
-  { id: 1, title: "Win a Premium Gaming Setup", date: "Submitted on 26 Jan 2026", status: "Approved" },
-  { id: 2, title: "Logo Design Challenge", date: "Submitted on 28 Jan 2026", status: "Pending" },
-  { id: 3, title: "Best Mobile Photography", date: "Submitted on 29 Jan 2026", status: "Rejected" },
+  { id: 1, title: "Win a Premium Gaming Setup",  date: "Submitted on 26 Jan 2026", status: "Approved" },
+  { id: 2, title: "Logo Design Challenge",        date: "Submitted on 28 Jan 2026", status: "Pending"  },
+  { id: 3, title: "Best Mobile Photography",      date: "Submitted on 29 Jan 2026", status: "Rejected" },
 ];
-
 const NOTIFICATIONS = [
-  { id: 1, title: "Concert Ending Soon",  message: 'Your entry has been approved!', date: "2024-06-11" },
-  { id: 2, title: "Submission Approved",  message: 'Your entry has been approved!', date: "2024-06-11" },
+  { id: 1, title: "Contest Ending Soon",  message: "Win a Premium Gaming Setup contest ends in 24 hours.", date: "2026-01-26" },
+  { id: 2, title: "Submission Approved",  message: "Your entry for Logo Design Challenge has been approved!", date: "2026-01-28" },
 ];
 
 // ─── STAT CARD ────────────────────────────────────────────────
-function StatCard({ label, value, theme }: { label: string; value: string; theme: "red" | "blue" | "light-red" }) {
-  const styles = {
-    red:       { bg: "bg-[#FDF4F4]", dot: "bg-[#A01C1C]" }, 
-    blue:      { bg: "bg-[#F6F7FB]", dot: "bg-[#00C48C]" }, 
-    "light-red": { bg: "bg-[#FDF4F4]", dot: "bg-[#FF5C5C]" }
-  };
-  const currentStyle = styles[theme];
-
+function StatCard({
+  label, value, icon: Icon, bg, iconBg, iconColor,
+}: {
+  label: string; value: string;
+  icon: React.ElementType;
+  bg: string; iconBg: string; iconColor: string;
+}) {
   return (
-    <div className={`flex-1 min-w-[240px] ${currentStyle.bg} rounded-[20px] p-6 flex items-center justify-between`}>
-      <div className="flex flex-col gap-2">
-        <span className="text-[15px] text-gray-600 font-medium">{label}</span>
-        <span className="text-[36px] font-bold text-gray-900 leading-none">{value}</span>
+    <div className={`flex-1 min-w-0 ${bg} rounded-2xl p-5 sm:p-6 flex items-center justify-between gap-4`}>
+      <div>
+        <p className="text-sm text-gray-500 font-medium mb-1">{label}</p>
+        <p className="text-3xl sm:text-4xl font-black text-gray-900 leading-none">{value}</p>
       </div>
-      <div className={`w-6 h-6 rounded-full ${currentStyle.dot}`} />
+      <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${iconBg}`}>
+        <Icon className={`w-5 h-5 ${iconColor}`} />
+      </div>
     </div>
   );
 }
 
 // ─── JOINED CONTEST CARD ──────────────────────────────────────
 function JoinedContestCard({
-  contest,
-  type,
-  onClick,
+  contest, type, onClick,
 }: {
-  contest: any;
+  contest: { id: number; title: string; description: string; status: string; image: string };
   type: string;
   onClick: () => void;
 }) {
   const isActive = contest.status === "Active";
-
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col md:flex-row gap-8 shadow-sm hover:shadow-md transition-shadow">
-      {/* Image Section - Adjusted for larger layout */}
-      <div className="w-full md:w-[260px] h-48 md:h-auto flex-shrink-0">
-        <img 
-          src={contest.image} 
-          alt={contest.title} 
-          className="w-full h-full object-cover rounded-xl" 
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 flex flex-col sm:flex-row gap-4 shadow-sm hover:shadow-md transition-shadow">
+      {/* Image */}
+      <div className="w-full sm:w-[200px] lg:w-[220px] h-44 sm:h-auto shrink-0">
+        <img
+          src={contest.image}
+          alt={contest.title}
+          className="w-full h-full object-cover rounded-xl"
         />
       </div>
 
-      {/* Content Section */}
-      <div className="flex-1 flex flex-col py-2">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-[20px] font-bold text-gray-900">{contest.title}</h3>
-          
-          <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[12px] font-semibold uppercase
+      {/* Content */}
+      <div className="flex-1 flex flex-col py-1 min-w-0">
+        <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
+          <h3 className="text-base sm:text-[18px] font-bold text-gray-900 leading-snug">{contest.title}</h3>
+          <span className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase shrink-0
             ${isActive ? "bg-green-50 text-green-600" : "bg-red-50 text-red-500"}`}>
-            <span className={`w-2 h-2 rounded-full ${isActive ? "bg-green-500" : "bg-red-500"}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${isActive ? "bg-green-500" : "bg-red-500"}`} />
             {contest.status}
           </span>
         </div>
 
-        <p className="text-[14px] text-gray-500 leading-relaxed mb-6 line-clamp-2 max-w-3xl">
-          {contest.description}
-        </p>
+        <p className="text-sm text-gray-400 leading-relaxed mb-5 line-clamp-2">{contest.description}</p>
 
-        {/* Action Buttons */}
-        <div className="mt-auto flex items-center gap-4">
+        <div className="mt-auto flex items-center gap-3 flex-wrap">
           <button
             onClick={onClick}
-            className="px-6 py-2.5 rounded-lg border border-[#A01C1C] text-[#A01C1C] font-semibold text-[14px] hover:bg-red-50 transition"
+            className="h-9 px-5 rounded-lg border border-[#A01C1C] text-[#A01C1C] font-semibold text-sm hover:bg-red-50 transition-colors"
           >
             View Contest
           </button>
-          
-          <span className="bg-[#EDE9FE] text-[#7C3AED] px-4 py-2 rounded-lg text-[13px] font-medium">
+          <span className="bg-purple-50 text-purple-600 border border-purple-100 px-3 py-1.5 rounded-lg text-xs font-semibold">
             {type}
           </span>
         </div>
@@ -150,25 +105,26 @@ function JoinedContestCard({
 // ─── SUBMISSION ROW ───────────────────────────────────────────
 function SubmissionRow({ item }: { item: typeof MY_SUBMISSIONS[0] }) {
   const cfg = {
-    Approved: { bg: "bg-[#ECFDF5]", text: "text-[#059669]", dot: "bg-[#10B981]", iconBg: "bg-[#DCFCE7]", iconColor: "#16A34A", Icon: Check },
-    Pending:  { bg: "bg-[#FFF7ED]", text: "text-[#D97706]", dot: "bg-[#F59E0B]", iconBg: "bg-[#FEF3C7]", iconColor: "#D97706", Icon: Clock },
-    Rejected: { bg: "bg-[#FEF2F2]", text: "text-[#DC2626]", dot: "bg-[#EF4444]", iconBg: "bg-[#FEE2E2]", iconColor: "#EF4444", Icon: X },
+    Approved: { bg: "bg-green-50", text: "text-green-600", dot: "bg-green-500", iconBg: "bg-green-100", iconColor: "text-green-600", Icon: Check    },
+    Pending:  { bg: "bg-amber-50", text: "text-amber-600", dot: "bg-amber-400", iconBg: "bg-amber-100", iconColor: "text-amber-600", Icon: Clock    },
+    Rejected: { bg: "bg-red-50",   text: "text-red-500",   dot: "bg-red-400",   iconBg: "bg-red-100",   iconColor: "text-red-500",   Icon: X        },
   };
-  const s = cfg[item.status as keyof typeof cfg] ?? cfg.Pending;
+  const s    = cfg[item.status as keyof typeof cfg] ?? cfg.Pending;
   const Icon = s.Icon;
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-      <div className="flex items-center gap-5">
-        <div className={`w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 ${s.iconBg}`}>
-          <Icon size={20} color={s.iconColor} strokeWidth={2.5} />
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
+      <div className="flex items-center gap-4">
+        <div className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${s.iconBg}`}>
+          <Icon className={`w-4 h-4 ${s.iconColor}`} strokeWidth={2.5} />
         </div>
         <div>
-          <h4 className="text-[16px] font-semibold text-gray-900">{item.title}</h4>
-          <p className="text-[14px] text-gray-400 mt-0.5">{item.date}</p>
+          <h4 className="text-sm sm:text-base font-semibold text-gray-900">{item.title}</h4>
+          <p className="text-xs text-gray-400 mt-0.5">{item.date}</p>
         </div>
       </div>
-      <div className={`${s.bg} ${s.text} px-5 py-2 rounded-full text-[13px] font-semibold flex items-center gap-2 w-fit`}>
-        <div className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
+      <div className={`${s.bg} ${s.text} px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-2 w-fit`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} />
         {item.status}
       </div>
     </div>
@@ -178,16 +134,16 @@ function SubmissionRow({ item }: { item: typeof MY_SUBMISSIONS[0] }) {
 // ─── NOTIFICATION ROW ─────────────────────────────────────────
 function NotificationRow({ item }: { item: typeof NOTIFICATIONS[0] }) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-6 flex gap-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] relative overflow-hidden">
-        <div className="absolute left-0 top-0 bottom-0 w-[5px] bg-[#A01C1C] h-full" />
-        <div className="pl-2 flex flex-col gap-1 w-full">
-            <div className="flex items-center gap-2">
-                <AlertCircle size={18} className="text-[#A01C1C]" />
-                <h4 className="text-[15px] font-bold text-gray-900">{item.title}</h4>
-            </div>
-            <p className="text-[14px] text-gray-500">{item.message}</p>
-            <span className="text-[13px] text-gray-400 mt-1">{item.date}</span>
+    <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-5 flex gap-4 shadow-sm relative overflow-hidden">
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#A01C1C]" />
+      <div className="pl-2 flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <AlertCircle className="w-4 h-4 text-[#A01C1C] shrink-0" />
+          <h4 className="text-sm font-bold text-gray-900">{item.title}</h4>
         </div>
+        <p className="text-sm text-gray-500">{item.message}</p>
+        <span className="text-xs text-gray-400 mt-1.5 block">{item.date}</span>
+      </div>
     </div>
   );
 }
@@ -195,108 +151,87 @@ function NotificationRow({ item }: { item: typeof NOTIFICATIONS[0] }) {
 // ─── MAIN DASHBOARD ───────────────────────────────────────────
 export default function Dashboard() {
   const router = useRouter();
-  
-  // States
+
   const [activeFilter, setActiveFilter] = useState("Giveaways");
-  const [activeTab, setActiveTab] = useState("Joined Contests");
+  const [activeTab,    setActiveTab]    = useState("Joined Contests");
 
-  // Determine which data to show
-  let currentData;
-  let typeLabel;
+  const filterMap: Record<string, { data: typeof GIVEAWAY_DATA; label: string }> = {
+    Giveaways:   { data: GIVEAWAY_DATA,   label: "Giveaway"   },
+    Submissions: { data: SUBMISSION_DATA, label: "Submission" },
+    Polls:       { data: POLL_DATA,       label: "Poll"       },
+  };
+  const { data: currentData, label: typeLabel } = filterMap[activeFilter];
 
-  if (activeFilter === "Giveaways") {
-    currentData = GIVEAWAY_DATA;
-    typeLabel = "Giveaway";
-  } else if (activeFilter === "Submissions") {
-    currentData = SUBMISSION_DATA;
-    typeLabel = "Submission";
-  } else {
-    currentData = POLL_DATA;
-    typeLabel = "Poll";
-  }
-
-  // Navigation Logic
   const handleNavigation = (id: number) => {
-      if (activeFilter === "Giveaways") {
-          router.push(`/dashboard/giveaway/${id}`);
-      } else if (activeFilter === "Submissions") {
-          router.push(`/dashboard/submission/${id}`);
-      } else if (activeFilter === "Polls") {
-          router.push(`/dashboard/poll/${id}`);
-      }
+    const routes: Record<string, string> = {
+      Giveaways:   `/dashboard/giveaway/${id}`,
+      Submissions: `/dashboard/submission/${id}`,
+      Polls:       `/dashboard/poll/${id}`,
+    };
+    router.push(routes[activeFilter]);
   };
 
   return (
-    <div className="bg-white font-sans py-10 px-6">
-      
-      {/* 
-         ─── MAIN CONTAINER WITH EXACT DIMENSIONS ─── 
-         Width: 1560px (max-w)
-         Height: 835px (min-h)
-         Gap: 32px (gap-8)
-         Position: Centered (mx-auto)
-      */}
-      <div className="w-full max-w-[1560px] min-h-[835px] mx-auto flex flex-col gap-8">
+    <div className="min-h-screen bg-gray-50/40">
+      <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-8 lg:px-[50px] py-8 sm:py-12">
 
         {/* Header */}
-        <div>
-          <h1 className="text-[28px] font-bold text-[#111827]">Dashboard</h1>
-          <p className="text-[15px] text-gray-500 mt-1">Welcome back, Seam Rahman</p>
+        <div className="mb-7">
+          <h1 className="text-2xl sm:text-[28px] font-black text-gray-900">Dashboard</h1>
+          <p className="text-sm text-gray-400 mt-1">Welcome back, Seam Rahman</p>
         </div>
 
-        {/* ─── TOP FILTER BUTTONS ─── */}
-        <div className="bg-[#F8F9FA] inline-flex p-1.5 rounded-xl gap-2 w-fit shadow-sm border border-gray-100">
-            {["Giveaways", "Submissions", "Polls"].map((filter) => (
-                <button
-                    key={filter}
-                    onClick={() => setActiveFilter(filter)}
-                    className={`
-                        px-8 py-3 rounded-lg text-[14px] font-semibold transition-all duration-300
-                        ${activeFilter === filter 
-                            ? "bg-gradient-to-b from-[#A01C1C] to-[#801616] text-white shadow-md" 
-                            : "text-gray-500 hover:text-gray-900 hover:bg-gray-200"}
-                    `}
-                >
-                    {filter}
-                </button>
-            ))}
+        {/* ── Filter Buttons ── */}
+        <div className="bg-white inline-flex p-1.5 rounded-xl gap-1.5 shadow-sm border border-gray-100 mb-7">
+          {["Giveaways", "Submissions", "Polls"].map((f) => (
+            <button
+              key={f}
+              onClick={() => setActiveFilter(f)}
+              className={`px-5 sm:px-7 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200
+                ${activeFilter === f
+                  ? "bg-gradient-to-b from-[#A01C1C] to-[#801616] text-white shadow-md"
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"}`}
+            >
+              {f}
+            </button>
+          ))}
         </div>
 
-        {/* Stats Section (Gap 32px provided by parent flex gap-8) */}
-        <div className="flex flex-wrap gap-8">
-          <StatCard label="Contests Joined"      value="03" theme="red"       />
-          <StatCard label="Submissions Approved" value="08" theme="blue"      />
-          <StatCard label="Pending Review"       value="01" theme="light-red" />
+        {/* ── Stats ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-7">
+          <StatCard label="Contests Joined"      value="03" icon={Trophy}      bg="bg-[#FDF4F4]" iconBg="bg-[#A01C1C]/10" iconColor="text-[#A01C1C]" />
+          <StatCard label="Submissions Approved" value="08" icon={FileCheck}   bg="bg-[#F0FDF4]" iconBg="bg-green-100"     iconColor="text-green-600" />
+          <StatCard label="Pending Review"       value="01" icon={Hourglass}   bg="bg-[#FFFBEB]" iconBg="bg-amber-100"     iconColor="text-amber-500" />
         </div>
 
-        {/* Tab Navigation */}
-        <div className="bg-[#F3F4F6] p-1.5 rounded-xl inline-flex gap-2 w-fit">
-          {["Joined Contests", "My Submissions", "Notification"].map(tab => (
+        {/* ── Tab Navigation ── */}
+        <div className="bg-white p-1.5 rounded-xl inline-flex gap-1.5 shadow-sm border border-gray-100 mb-7 overflow-x-auto max-w-full">
+          {["Joined Contests", "My Submissions", "Notification"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-2.5 rounded-[10px] text-[13px] font-semibold transition-all duration-200
-                ${activeTab === tab 
-                  ? "bg-[#A01C1C] text-white shadow-sm" 
-                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-200"}`}
+              className={`px-4 sm:px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 whitespace-nowrap
+                ${activeTab === tab
+                  ? "bg-[#A01C1C] text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-800 hover:bg-gray-100"}`}
             >
               {tab}
             </button>
           ))}
         </div>
 
-        {/* ── Content Area ── */}
+        {/* ── Content ── */}
         <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            
-          {/* JOINED CONTESTS */}
+
+          {/* Joined Contests */}
           {activeTab === "Joined Contests" && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               {currentData.map((item) => (
-                <JoinedContestCard 
-                  key={item.id} 
+                <JoinedContestCard
+                  key={item.id}
                   contest={item}
                   type={typeLabel}
-                  onClick={() => handleNavigation(item.id)} 
+                  onClick={() => handleNavigation(item.id)}
                 />
               ))}
             </div>
@@ -304,20 +239,19 @@ export default function Dashboard() {
 
           {/* My Submissions */}
           {activeTab === "My Submissions" && (
-            <div className="flex flex-col gap-8">
-              {MY_SUBMISSIONS.map(s => <SubmissionRow key={s.id} item={s} />)}
+            <div className="flex flex-col gap-4">
+              {MY_SUBMISSIONS.map((s) => <SubmissionRow key={s.id} item={s} />)}
             </div>
           )}
 
           {/* Notifications */}
           {activeTab === "Notification" && (
-            <div className="flex flex-col gap-8">
-              {NOTIFICATIONS.map(n => <NotificationRow key={n.id} item={n} />)}
+            <div className="flex flex-col gap-4">
+              {NOTIFICATIONS.map((n) => <NotificationRow key={n.id} item={n} />)}
             </div>
           )}
-        
-        </div>
 
+        </div>
       </div>
     </div>
   );

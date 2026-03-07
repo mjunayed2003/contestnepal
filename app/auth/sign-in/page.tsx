@@ -116,7 +116,7 @@ const SignIn = () => {
                   </button>
                 </div>
                 <div className="flex justify-end mt-1">
-                    <Link href="#" className="text-xs text-[#A01C1C] font-semibold hover:underline">
+                    <Link href="/auth/forgot-password" className="text-xs text-[#A01C1C] font-semibold hover:underline">
                         Forgot Password?
                     </Link>
                 </div>
@@ -150,14 +150,14 @@ const SignIn = () => {
                   <span className="text-sm font-medium text-gray-700">Google</span>
                 </button>
                 <button type="button" className="h-[50px] border border-gray-200 rounded-lg flex items-center justify-center gap-2 hover:bg-gray-50 transition-colors">
-                  <Image src="https://www.svgrepo.com/show/448234/apple.svg" alt="Apple" width={22} height={22} />
+                  <Image src="/images/apple.svg" alt="Apple" width={22} height={22} />
                   <span className="text-sm font-medium text-gray-700">Apple</span>
                 </button>
               </div>
 
               <div className="text-center mt-8">
                 <span className="text-gray-500 text-sm">Don't have an account? </span>
-                <Link href="/sign-up" className="text-[#A01C1C] font-bold hover:underline">
+                <Link href="/auth/sign-up" className="text-[#A01C1C] font-bold hover:underline">
                   Create Account
                 </Link>
               </div>
