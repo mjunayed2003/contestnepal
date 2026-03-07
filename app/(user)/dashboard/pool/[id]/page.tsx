@@ -7,26 +7,26 @@ import {
 } from "lucide-react";
 
 // ─── MOCK DATA ────────────────────────────────────────────────
-const POOL_DATA: Record<string, any> = {
+const POLL_DATA: Record<string, any> = {
   "default": {
-    title: "World Cup Prediction Pool",
+    title: "World Cup Prediction Poll",
     deadline: "25 June 2026",
     status: "Active",
     image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=1200&q=80",
     participants: 120,
-    grandPrize: "$500 Shared Pool",
+    grandPrize: "$500 Shared Poll",
     results: [
       { id: 1, label: "Team A", votes: 145, percentage: 60, isWinner: true },
       { id: 2, label: "Team B", votes: 95, percentage: 40, isWinner: false }
     ]
   },
   "201": {
-    title: "World Cup Prediction Pool",
+    title: "World Cup Prediction Poll",
     deadline: "20 July 2026",
     status: "Active",
     image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=1200&q=80",
     participants: 500,
-    grandPrize: "$1000 Pool",
+    grandPrize: "$1000 Poll",
     results: [
       { id: 1, label: "Brazil", votes: 300, percentage: 60, isWinner: false },
       { id: 2, label: "Argentina", votes: 200, percentage: 40, isWinner: false }
@@ -64,11 +64,11 @@ function PollResultCard({ item }: { item: any }) {
   );
 }
 
-export default function PoolDetailsPage() {
+export default function PollDetailsPage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id ? String(params.id) : "default";
-  const data = POOL_DATA[id] || POOL_DATA["default"];
+  const data = POLL_DATA[id] || POLL_DATA["default"];
 
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900 pb-20">
@@ -81,7 +81,7 @@ export default function PoolDetailsPage() {
         </button>
 
         <div className="relative w-full h-[280px] rounded-t-[30px] overflow-hidden">
-          <img src={data.image} alt="Pool Banner" className="w-full h-full object-cover"/>
+          <img src={data.image} alt="Poll Banner" className="w-full h-full object-cover"/>
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
         </div>
 
@@ -89,7 +89,7 @@ export default function PoolDetailsPage() {
           <div className="flex flex-col lg:flex-row gap-10">
             <div className="flex-1">
                <div className="flex gap-2 mb-3">
-                  <span className="bg-purple-100 text-purple-700 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase">Pool</span>
+                  <span className="bg-purple-100 text-purple-700 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase">Poll</span>
                   <span className="bg-yellow-100 text-yellow-700 px-3 py-0.5 rounded-full text-[11px] font-bold uppercase">{data.status}</span>
                </div>
                <h1 className="text-[26px] font-bold text-gray-900 mb-2">{data.title}</h1>
@@ -113,7 +113,7 @@ export default function PoolDetailsPage() {
               </button>
               <div className="bg-[#F6F7FB] rounded-xl p-5">
                  <div className="flex items-center gap-2 mb-3 text-[#A01C1C]">
-                    <Trophy size={16} /> <span className="text-[13px] font-bold text-gray-900">Prize Pool</span>
+                    <Trophy size={16} /> <span className="text-[13px] font-bold text-gray-900">Prize Poll</span>
                  </div>
                  <p className="text-[16px] font-bold text-gray-900">{data.grandPrize}</p>
               </div>

@@ -16,7 +16,7 @@ const categories = [
     browseLabel: "Browse Submission",
   },
   {
-    title: "Pools & Voting",
+    title: "Polls & Voting",
     description: "Cast your vote on trending topics. Instant results and participation rewards.",
     count: "45 active contests",
     browseLabel: "Browse Poll",

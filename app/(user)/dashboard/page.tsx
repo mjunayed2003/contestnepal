@@ -42,18 +42,18 @@ const SUBMISSION_DATA = [
   },
 ];
 
-const POOL_DATA = [
+const POLL_DATA = [
   { 
     id: 201, 
-    title: "World Cup Prediction Pool", 
-    description: "Predict the winner of the upcoming matches and win big prizes from the shared pool.", 
+    title: "World Cup Prediction Poll", 
+    description: "Predict the winner of the upcoming matches and win big prizes from the shared poll.", 
     status: "Active", 
     image: "https://images.unsplash.com/photo-1518091043644-c1d4457512c6?w=600&q=80" 
   },
   { 
     id: 202, 
     title: "Crypto Price Prediction", 
-    description: "Guess the Bitcoin price at the end of the month. The closest guess wins the entire pool.", 
+    description: "Guess the Bitcoin price at the end of the month. The closest guess wins the entire poll.", 
     status: "Closed", 
     image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=600&q=80" 
   },
@@ -211,8 +211,8 @@ export default function Dashboard() {
     currentData = SUBMISSION_DATA;
     typeLabel = "Submission";
   } else {
-    currentData = POOL_DATA;
-    typeLabel = "Pool";
+    currentData = POLL_DATA;
+    typeLabel = "Poll";
   }
 
   // Navigation Logic
@@ -221,8 +221,8 @@ export default function Dashboard() {
           router.push(`/dashboard/giveaway/${id}`);
       } else if (activeFilter === "Submissions") {
           router.push(`/dashboard/submission/${id}`);
-      } else if (activeFilter === "Pools") {
-          router.push(`/dashboard/pool/${id}`);
+      } else if (activeFilter === "Polls") {
+          router.push(`/dashboard/poll/${id}`);
       }
   };
 
@@ -246,7 +246,7 @@ export default function Dashboard() {
 
         {/* ─── TOP FILTER BUTTONS ─── */}
         <div className="bg-[#F8F9FA] inline-flex p-1.5 rounded-xl gap-2 w-fit shadow-sm border border-gray-100">
-            {["Giveaways", "Submissions", "Pools"].map((filter) => (
+            {["Giveaways", "Submissions", "Polls"].map((filter) => (
                 <button
                     key={filter}
                     onClick={() => setActiveFilter(filter)}

@@ -215,9 +215,149 @@ function OverviewTab() {
   );
 }
 
+/* ─── PARTICIPANT DETAIL MODAL ─────────────────────────────── */
+interface ParticipantDetailModalProps {
+  participant: Participant;
+  onClose: () => void;
+}
+
+function ParticipantDetailModal({ participant, onClose }: ParticipantDetailModalProps) {
+  // Mock submission history for this participant
+  const submissionHistory = Array.from({ length: participant.submissions }, (_, i) => ({
+    id: i + 1,
+    image: i % 2 === 0 ? "/images/contest2.jpg" : "/images/contest3.jpg",
+    content: i === 0 ? "Beautiful sunset photograph from my recent beach trip" : "Cityscape photo taken during golden hour",
+    date: "2/5/2026, 10:25PM",
+    status: i === 0 ? "Approved" : "Pending",
+  }));
+
+  const statusColor: Record<string, string> = {
+    Submitted: "bg-blue-50 text-blue-600 border border-blue-100",
+    Approved:  "bg-green-50 text-green-600 border border-green-100",
+    Pending:   "bg-yellow-50 text-yellow-600 border border-yellow-100",
+    Rejected:  "bg-red-50 text-red-500 border border-red-100",
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Modal Header */}
+        <div className="flex justify-between items-center px-6 py-4 border-b border-gray-100 sticky top-0 bg-white z-10">
+          <h3 className="text-base font-bold text-gray-900">Participant Details</h3>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="p-6 space-y-5">
+          {/* Profile Section */}
+          <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="w-14 h-14 rounded-full bg-[#A01C1C]/10 flex items-center justify-center shrink-0">
+              <span className="text-xl font-black text-[#A01C1C]">
+                {participant.name.charAt(0)}
+              </span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-base font-bold text-gray-900 truncate">{participant.name}</p>
+              <p className="text-sm text-gray-400 truncate">{participant.email}</p>
+            </div>
+            <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0 ${participantStatusStyle[participant.status]}`}>
+              {participant.status.toUpperCase()}
+            </span>
+          </div>
+
+          {/* Info Grid */}
+          <div className="grid grid-cols-3 gap-3">
+            <div className="bg-blue-50 rounded-xl p-4 text-center border border-blue-100">
+              <p className="text-2xl font-black text-blue-600">{participant.submissions}</p>
+              <p className="text-[11px] text-blue-400 font-medium mt-0.5">Submissions</p>
+            </div>
+            <div className="bg-green-50 rounded-xl p-4 text-center border border-green-100">
+              <p className="text-2xl font-black text-green-600">
+                {submissionHistory.filter(s => s.status === "Approved").length}
+              </p>
+              <p className="text-[11px] text-green-400 font-medium mt-0.5">Approved</p>
+            </div>
+            <div className="bg-yellow-50 rounded-xl p-4 text-center border border-yellow-100">
+              <p className="text-2xl font-black text-yellow-600">
+                {submissionHistory.filter(s => s.status === "Pending").length}
+              </p>
+              <p className="text-[11px] text-yellow-400 font-medium mt-0.5">Pending</p>
+            </div>
+          </div>
+
+          {/* Join Date */}
+          <div className="flex items-center justify-between px-4 py-3 bg-gray-50 rounded-xl border border-gray-100">
+            <div className="flex items-center gap-2 text-gray-500">
+              <Clock className="w-4 h-4" />
+              <span className="text-sm font-medium">Joined Date</span>
+            </div>
+            <span className="text-sm font-semibold text-gray-800">{participant.joinDate}</span>
+          </div>
+
+          {/* Submission History */}
+          {submissionHistory.length > 0 && (
+            <div>
+              <h4 className="text-sm font-bold text-gray-800 mb-3 flex items-center gap-2">
+                <FileText className="w-4 h-4 text-gray-400" />
+                Submission History
+              </h4>
+              <div className="space-y-3">
+                {submissionHistory.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 border border-gray-100">
+                      <Image
+                        src={sub.image}
+                        alt="submission"
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-gray-600 line-clamp-2">{sub.content}</p>
+                      <p className="text-[11px] text-gray-400 mt-1">{sub.date}</p>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${statusColor[sub.status]}`}>
+                      {sub.status.toUpperCase()}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Modal Footer */}
+        <div className="px-6 pb-6">
+          <button
+            onClick={onClose}
+            className="w-full h-11 rounded-xl border border-gray-200 text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── PARTICIPANTS TAB ─────────────────────────────────────── */
 function ParticipantsTab() {
   const [search, setSearch] = useState("");
+  const [modalParticipant, setModalParticipant] = useState<Participant | null>(null);
 
   const filtered = PARTICIPANTS.filter(
     (p) =>
@@ -226,67 +366,81 @@ function ParticipantsTab() {
   );
 
   return (
-    <div className="border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
-      {/* Top bar */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 gap-3">
-        <div>
-          <h3 className="text-base font-bold text-gray-900">Participants</h3>
-          <p className="text-xs text-gray-400 mt-0.5">Total Number: {PARTICIPANTS.length}</p>
+    <>
+      <div className="border border-gray-100 rounded-2xl shadow-sm overflow-hidden">
+        {/* Top bar */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-6 gap-3">
+          <div>
+            <h3 className="text-base font-bold text-gray-900">Participants</h3>
+            <p className="text-xs text-gray-400 mt-0.5">Total Number: {PARTICIPANTS.length}</p>
+          </div>
+          <button className="flex items-center gap-2 bg-[#A01C1C] hover:bg-[#851717] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
         </div>
-        <button className="flex items-center gap-2 bg-[#A01C1C] hover:bg-[#851717] text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors shadow-sm">
-          <Download className="w-4 h-4" /> Export CSV
-        </button>
-      </div>
 
-      {/* Search */}
-      <div className="px-6 pb-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          <input
-            type="text"
-            placeholder="Search participants by name or email..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 h-10 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#A01C1C]/20 focus:border-[#A01C1C]"
-          />
+        {/* Search */}
+        <div className="px-6 pb-4">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search participants by name or email..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 h-10 rounded-xl border border-gray-200 bg-gray-50 text-sm text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-[#A01C1C]/20 focus:border-[#A01C1C]"
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-t border-b border-gray-100 bg-gray-50/50">
-              {["Participant", "Email", "Join Date", "Submissions", "Status", "Actions"].map((h) => (
-                <th key={h} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((p) => (
-              <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
-                <td className="px-6 py-4 font-medium text-gray-900">{p.name}</td>
-                <td className="px-6 py-4 text-gray-500">{p.email}</td>
-                <td className="px-6 py-4 text-gray-500">{p.joinDate}</td>
-                <td className="px-6 py-4 text-gray-700">{p.submissions}</td>
-                <td className="px-6 py-4">
-                  <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${participantStatusStyle[p.status]}`}>
-                    {p.status.toUpperCase()}
-                  </span>
-                </td>
-                <td className="px-6 py-4">
-                  <button className="text-[#A01C1C] text-xs font-semibold hover:underline">
-                    View Details
-                  </button>
-                </td>
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-t border-b border-gray-100 bg-gray-50/50">
+                {["Participant", "Email", "Join Date", "Submissions", "Status", "Actions"].map((h) => (
+                  <th key={h} className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                    {h}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {filtered.map((p) => (
+                <tr key={p.id} className="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                  <td className="px-6 py-4 font-medium text-gray-900">{p.name}</td>
+                  <td className="px-6 py-4 text-gray-500">{p.email}</td>
+                  <td className="px-6 py-4 text-gray-500">{p.joinDate}</td>
+                  <td className="px-6 py-4 text-gray-700">{p.submissions}</td>
+                  <td className="px-6 py-4">
+                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${participantStatusStyle[p.status]}`}>
+                      {p.status.toUpperCase()}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4">
+                    {/* ← View Details এখন modal খুলবে */}
+                    <button
+                      onClick={() => setModalParticipant(p)}
+                      className="text-[#A01C1C] text-xs font-semibold hover:underline"
+                    >
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      {/* Participant Detail Modal */}
+      {modalParticipant && (
+        <ParticipantDetailModal
+          participant={modalParticipant}
+          onClose={() => setModalParticipant(null)}
+        />
+      )}
+    </>
   );
 }
 

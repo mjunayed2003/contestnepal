@@ -9,7 +9,7 @@ import {
   CheckCircle, Vote, AlertCircle 
 } from "lucide-react";
 
-export default function PoolDetailsPage({ params }: { params: { id: string } }) {
+export default function PollDetailsPage({ params }: { params: { id: string } }) {
   const router = useRouter();
 
   // --- STATE ---
@@ -21,7 +21,7 @@ export default function PoolDetailsPage({ params }: { params: { id: string } }) 
   const contest = {
     id: params.id,
     title: "Community Choice: Next Feature",
-    type: "pool",
+    type: "poll",
     deadline: "28 Feb 2026",
     status: "Active",
     description: "Help us decide which feature to prioritize next. Every vote counts!",

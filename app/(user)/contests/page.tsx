@@ -7,20 +7,20 @@ import { Search } from "lucide-react";
 import ContestCard from "@/component/Contest-Card/ContestCard";
 
 // Filter types defined here
-type FilterType = "All Contests" | "Giveaways" | "Submissions" | "Pools";
+type FilterType = "All Contests" | "Giveaways" | "Submissions" | "Polls";
 
-const filters: FilterType[] = ["All Contests", "Giveaways", "Submissions", "Pools"];
+const filters: FilterType[] = ["All Contests", "Giveaways", "Submissions", "Polls"];
 
 // Mock Data (Categories must match exact spelling used in logic below)
 const allContests = [
   { id: 1, image: "/images/contest1.jpg", badge: "Giveaway", title: "Win a Premium Gaming Setup", prize: "$2,500 Gaming PC", date: "Feb 15, 2025", participants: "1,145", status: "Active" as const, category: "Giveaways" },
   { id: 2, image: "/images/contest2.jpg", badge: "Photo", title: "Best Travel Photo Contest", prize: "$1,000 Voucher", date: "Feb 18, 2025", participants: "899", status: "Ended" as const, category: "Submissions" },
   { id: 3, image: "/images/contest3.jpg", badge: "Design", title: "UI/UX Design Challenge", prize: "MacBook Pro M3", date: "Mar 01, 2025", participants: "530", status: "Active" as const, category: "Submissions" },
-  { id: 4, image: "/images/contest1.jpg", badge: "Pool", title: "Predict the Next Champion", prize: "$500 Cash", date: "Feb 20, 2025", participants: "2,400", status: "Active" as const, category: "Pools" },
+  { id: 4, image: "/images/contest1.jpg", badge: "Poll", title: "What's Your Favorite Genre?", prize: "$100 Gift Card", date: "Feb 20, 2025", participants: "1,200", status: "Active" as const, category: "Polls" },
   { id: 5, image: "/images/contest1.jpg", badge: "Giveaway", title: "Win a Premium Gaming Setup", prize: "$2,500 Gaming PC", date: "Feb 15, 2025", participants: "1,145", status: "Active" as const, category: "Giveaways" },
   { id: 6, image: "/images/contest2.jpg", badge: "Photo", title: "Best Travel Photo Contest", prize: "$1,000 Voucher", date: "Feb 18, 2025", participants: "899", status: "Ended" as const, category: "Submissions" },
   { id: 7, image: "/images/contest3.jpg", badge: "Design", title: "UI/UX Design Challenge", prize: "MacBook Pro M3", date: "Mar 01, 2025", participants: "530", status: "Active" as const, category: "Submissions" },
-  { id: 8, image: "/images/contest1.jpg", badge: "Pool", title: "Predict the Next Champion", prize: "$500 Cash", date: "Feb 20, 2025", participants: "2,400", status: "Active" as const, category: "Pools" },
+  { id: 8, image: "/images/contest1.jpg", badge: "Poll", title: "Predict the Next Champion", prize: "$500 Cash", date: "Feb 20, 2025", participants: "2,400", status: "Active" as const, category: "Polls" },
 ];
 
 export default function ExploreContestsPage() {
@@ -41,8 +41,8 @@ export default function ExploreContestsPage() {
       path = `/contests/giveaway/${contestId}`;
     } else if (category === "Submissions") {
       path = `/contests/submission/${contestId}`;
-    } else if (category === "Pools") {
-      path = `/contests/pool/${contestId}`;
+    } else if (category === "Polls") {
+      path = `/contests/poll/${contestId}`;
     } else {
       // Fallback if category doesn't match
       path = `/contests/${contestId}`;
@@ -58,7 +58,7 @@ export default function ExploreContestsPage() {
   };
 
   const filtered = allContests.filter((c) => {
-    const matchCategory = active === "All Contests" || (active === "Submissions" && c.category === "Submissions") || (active === "Giveaways" && c.category === "Giveaways") || (active === "Pools" && c.category === "Pools");
+    const matchCategory = active === "All Contests" || (active === "Submissions" && c.category === "Submissions") || (active === "Giveaways" && c.category === "Giveaways") || (active === "Polls" && c.category === "Polls");
 
     const matchSearch = c.title.toLowerCase().includes(search.toLowerCase());
     return matchCategory && matchSearch;
