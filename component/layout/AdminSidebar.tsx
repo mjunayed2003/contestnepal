@@ -19,12 +19,12 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 const navItems = [
-  { label: "Dashboard",         href: "/admin",         icon: LayoutDashboard },
-  { label: "My Contests",       href: "/admin/contests",          icon: Trophy          },
-  { label: "Submissions",       href: "/admin/submissions",       icon: FileText        },
-  { label: "Participants",      href: "/admin/participants",      icon: Users           },
-  { label: "Winner Management", href: "/admin/winner-management", icon: Award           },
-  { label: "Setting",           href: "/admin/settings",          icon: Settings        },
+  { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
+  { label: "My Contests", href: "/admin/contests", icon: Trophy },
+  { label: "Submissions", href: "/admin/submissions", icon: FileText },
+  { label: "Participants", href: "/admin/participants", icon: Users },
+  { label: "Winner Management", href: "/admin/winner-management", icon: Award },
+  { label: "Setting", href: "/admin/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -38,7 +38,7 @@ export default function AdminSidebar() {
       <div className="flex items-center justify-start h-[68px] px-8 border-b border-gray-200">
         <Link href="/admin/dashboard">
           <Image
-            src="/images/logo.svg" 
+            src="/images/logo.svg"
             alt="Wuffoos Logo"
             width={120}
             height={36}
@@ -56,8 +56,11 @@ export default function AdminSidebar() {
 
         {navItems.map(({ label, href, icon: Icon }) => {
           // Active link logic
-          const isActive = pathname === href || pathname.startsWith(`${href}/`);
-          
+          const isActive =
+            href === "/admin"
+              ? pathname === "/admin"
+              : pathname === href || pathname.startsWith(`${href}/`);
+
           return (
             <Link key={href} href={href} className="w-full">
               <div
